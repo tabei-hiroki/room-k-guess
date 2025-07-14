@@ -24,6 +24,9 @@ yarn-error.log*
 # Local Netlify folder
 .netlify
 
+# .firebase
+.firebase/*
+
 /coverage
 
 /tests/e2e/screenshots
