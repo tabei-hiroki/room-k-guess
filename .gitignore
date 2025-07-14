@@ -25,7 +25,7 @@ yarn-error.log*
 .netlify
 
 # .firebase
-.firebase/*
+.firebase
 
 /coverage
 
