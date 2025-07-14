@@ -46,15 +46,13 @@ Firebase のプロジェクト作成やマルチプレイ設定、Firebase Hosti
 - PWA対応（モバイルでも快適に動作）
 - デプロイ：Firebase Hosting または GitHub Pages
 
-## 📄 ライセンスとクレジット
+## 📄 ライセンス
 
-本プロジェクトは [GeoGuess](https://github.com/GeoGuess/GeoGuess) を元にしています。  
-GeoGuess は MIT ライセンスで提供されています。
-
-```
-MIT License
-...
-```
+このプロジェクトは [MIT License](LICENSE) のもとで公開されています。  
+元プロジェクト [GeoGuess](https://github.com/GeoGuess/GeoGuess) も MIT ライセンスを採用しています。
 
 ## ✍️ 作者
+
+- Hiroki Tabei（[@tabei-hiroki](https://github.com/tabei-hiroki)）
+- 本プロジェクトは個人用途およびセルフホスト用に公開しています。
 
