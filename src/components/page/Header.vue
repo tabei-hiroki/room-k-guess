@@ -158,7 +158,7 @@ export default {
     }
     .header__branding {
         display: flex;
-        align-items: center;  // ← これで縦中央揃え
+        align-items: center;
         text-decoration: none;
 
         .header__logo {
