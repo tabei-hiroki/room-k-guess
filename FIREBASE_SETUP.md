@@ -36,7 +36,7 @@
 {
   "rules": {
     ".read": "now < 1755010800000",  // 2025-8-13
-    ".write": "now < 1755010800000",  // 2025-8-13
+    ".write": "now < 1755010800000"  // 2025-8-13
   }
 }
 ```
@@ -60,9 +60,35 @@ VUE_APP_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX （Google Analytics を使用しな
 
 ---
 
-## Hosting は必要？
+## 4. Firebase Hosting 導入手順（Vue.js アプリの場合）
 
-**ローカル開発**では `npm run serve` によるホスティングで十分。Firebase Hosting は **任意** です。
+Firebase Hosting を使うことで、Vue.js アプリを簡単に Web に公開できます。
+本プロジェクトでは任意の選択ですが、チームメンバーが共有しやすくなるため推奨します。
+
+### 🔹 初期設定（初回のみ）
+
+```bash
+firebase init hosting
+```
+
+初期化中に表示される英語の質問と推奨回答：
+
+- `What do you want to use as your public directory? (public)` → `dist`
+- `Configure as a single-page app (rewrite all urls to /index.html)? (Y/n)` → `Y`
+- `Set up automatic builds and deploys with GitHub? (Y/n)` → `n`
+
+### 🔹 デプロイコマンド
+
+```bash
+npm run build
+firebase deploy
+```
+
+デプロイ成功後、以下のURLでアクセスできます：
+
+```
+https://<project-id>.web.app
+```
 
 ---
 
