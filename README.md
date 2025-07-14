@@ -24,6 +24,11 @@ npm run serve
 VITE_MAPS_API_KEY=あなたのGoogleMapsAPIキー
 ```
 
+## Firebase の設定
+
+Firebase のプロジェクト作成や `.env` 設定については、[こちらのガイド](docs/firebase-setup.md) を参照してください。
+
+
 ## 🕹️ 遊び方
 
 - ランダムに表示される場所の風景（Google StreetView）を見て、地図上で位置を当てるゲームです。
