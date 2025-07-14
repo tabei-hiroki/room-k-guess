@@ -61,9 +61,9 @@
     "redirectToHomePage": "ホーム画面にリダイレクトします...",
     "exitGame": "ゲームを強制終了しました。5秒後にリダイレクトします...",
     "waitForOtherPlayersToFinish": "他のプレーヤーが終了するのを待っています...",
-    "confirmExit": "Are you sure to leave the current game? This will abort the game!",
-    "countdownAlert": "Countdown started : {count} second remaining | Countdown started : {count} seconds remaining",
-    "leaderboard": "Leaderboard"
+    "confirmExit": "ゲームをやめますか？やめるとゲームが中止されます！",
+    "countdownAlert": "最初のピンが立てられました: カウントダウン残り{count}秒",
+    "leaderboard": "ランキング"
   },
   "Maps": {
     "makeGuess": "推測する",
@@ -140,11 +140,11 @@
     "alreadyStarted": "This room has already started.  Please try another."
   },
   "CardRoomName": {
-    "title": "Type a room name to create a new room or join a existing room"
+    "title": "部屋の名前を入れて、新しく作るか 参加してください"
   },
   "CardRoomPlayerName": {
     "title": "Room:",
-    "input": "Type a player name.",
+    "input": "プレイヤー名を入力してください.",
     "anonymousPlayerName": "Anonymous 🕵",
     "players": "1 player | {count} players"
   },
@@ -162,26 +162,26 @@
     "cantPlayGeoJson": "ジオJSONが無効です。5つ以上のポジションが必要です。"
   },
   "CardRoomSettings": {
-    "title": "Game Settings",
-    "modeLabel": "Select game mode",
-    "includePhotopheres": "Include Photospheres",
-    "timeAttackLabel": "TimeAttack",
-    "timeattackInfos": "In TimeAttack mode, only the player who guesses the country first gets the point. Be quick and win!",
-    "allowMove": "Allow Move",
-    "allowZoom": "Allow Zoom",
-    "allowPan": "Allow Pan",
-    "guessedLeaderboard": "Display whether players have guessed",
-    "scoreLeaderboard": "Display score leaderboard",
-    "countDownLabel": "CountDown (seconds)",
-    "scoreModeLabel": "Score formula",
+    "title": "ゲームの設定",
+    "modeLabel": "ゲームの種類を選んでください",
+    "includePhotopheres": "写真の場所も含める",
+    "timeAttackLabel": "タイムアタック",
+    "timeattackInfos": "タイムアタックでは、最初に国を当てた人だけがポイントをもらえます。はやく答えよう！",
+    "allowMove": "移動をOKにする",
+    "allowZoom": "ズームをOKにする",
+    "allowPan": "見回すことをOKにする",
+    "guessedLeaderboard": "だれが答えたかを表示する",
+    "scoreLeaderboard": "スコアのランキングを表示する",
+    "countDownLabel": "カウントダウン（秒）",
+    "scoreModeLabel": "スコアの計算方法",
     "scoreModes": {
-      "normal": "normal",
-      "time": "time"
+      "normal": "ふつう",
+      "time": "タイム制"
     },
-    "selectAreas": "Select Areas",
-    "moreSettings": "More settings",
-    "optimiseStreetView": "StreetViewの最適化 (公式のみ)",
-    "nbRound": "ラウンド数"
+    "selectAreas": "遊ぶ場所を選ぶ",
+    "moreSettings": "もっと詳しい設定",
+    "optimiseStreetView": "ストリートビューの動きをよくする（公式地図のみ）",
+    "nbRound": "ラウンドの数"
   },
   "CardRoomDifficulty": {
     "title": "Set a difficulty level.",
