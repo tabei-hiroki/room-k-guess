@@ -1,12 +1,13 @@
 <template>
     <div>
         <v-app-bar class="header" height="100">
-            <router-link to="/">
+            <router-link to="/" class="header__branding">
                 <img class="header__logo" src="@/assets/geoguessLogo.png" />
                 <img
                     class="header__logo-min"
                     src="@/../public/img/icons/android-icon-72x72.png"
                 />
+                <span class="header__subtitle">for room-K</span>
             </router-link>
 
             <div class="flex-grow-1" />
@@ -155,15 +156,31 @@ export default {
         }
         font-size: 1.2rem;
     }
-    .header__logo {
-        height: 5rem;
-        width: auto;
-    }
-    .header__logo-min {
+    .header__branding {
+        display: flex;
+        align-items: center;  // ← これで縦中央揃え
+        text-decoration: none;
+
+        .header__logo {
+            height: 5rem;
+            width: auto;
+        }
+        .header__logo-min {
+            display: none;
+        }
+        .header__nav-icon {
         display: none;
-    }
-    .header__nav-icon {
-       display: none;
+        }
+        .header__subtitle {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--v-theme-on-header);
+            white-space: nowrap;
+            @media (max-width: 840px) {
+                display: none;
+            }
+        }
     }
 }
 
