@@ -300,170 +300,115 @@ export default {
       }
     },
     async mounted() {
+        // ルート > props の順で roomId を解決（props は変更しない）
+        const rid = this.$route?.params?.roomName || this.roomName || '';
+        if (!rid || /[.#$\[\]]/.test(rid)) {
+            // 空 or Firebase 禁止文字ならホームへ
+            this.$router.replace({ name: 'home' });
+            return;
+        }
+
         if (
             (this.areaParams && this.areaParams.data.urlArea) ||
             this.mode === GAME_MODE.COUNTRY
         ) {
-            await this.loadAreas(
-                this.areaParams && this.areaParams.data.urlArea
-            );
+            await this.loadAreas(this.areaParams && this.areaParams.data.urlArea);
         }
+
         await this.$gmapApiPromiseLazy();
-        this.panorama = new google.maps.StreetViewPanorama(
-            this.$refs.streetView
-        );
+        this.panorama = new google.maps.StreetViewPanorama(this.$refs.streetView);
 
         if (!this.streetViewService) {
             this.streetViewService = new StreetViewService(
-                { allPanorama: this.allPanorama, optimiseStreetView: this.optimiseStreetView },
-                { mode: this.mode, areaParams: this.areaParams, areasJson: this.areasJson },
-                this.placeGeoJson,
-                this.roundsPredefined
+            { allPanorama: this.allPanorama, optimiseStreetView: this.optimiseStreetView },
+            { mode: this.mode, areaParams: this.areaParams, areasJson: this.areasJson },
+            this.placeGeoJson,
+            this.roundsPredefined
             );
         }
 
         if (!this.multiplayer) {
             await this.loadStreetView();
             this.$refs.mapContainer.startNextRound();
-            
-            if (this.timeLimitation != 0) {
-                if (!this.hasTimerStarted) {
-                    this.initTimer(this.timeLimitation);
-                    this.hasTimerStarted = true;
-                }
+
+            if (this.timeLimitation != 0 && !this.hasTimerStarted) {
+            this.initTimer(this.timeLimitation);
+            this.hasTimerStarted = true;
             }
             this.isReady = true;
         } else {
-            // Set a room name if it's null to detect when the user refresh the page
-            if (!this.roomName) {
-                this.exitGame();
-            }
-
-            this.room = firebase.database().ref(this.roomName);
+            // ここからは解決済みの rid で RTDB を参照
+            this.room = firebase.database().ref(rid);
 
             if (this.playerNumber === 1) {
-                await this.loadStreetView();
+            await this.loadStreetView();
             }
 
             this.room.child('active').set(true);
             this.room.on('value', (snapshot) => {
-                // Check if the room is already removed
-                if (snapshot.hasChild('active')) {
-                    // Leaderboard
-                    if(this.scoreLeaderboard) {
-                        this.leaderboard = Object.entries(snapshot.val().playerName).map((player) => {
-                            return {
-                                scoreHeader: this.leaderboard.find((entity) => entity.id === player[0])?.scoreHeader || 0,
-                                score: snapshot.val()?.finalPoints?.[player[0]] || 0,
-                                name: player[1],
-                                id: player[0],
-                                guessed: !!snapshot.val()?.guess?.[player[0]],
-                            };
-                        });
-                    } else if(this.guessedLeaderboard) {
-                      this.leaderboard = Object.entries(snapshot.val().playerName).map((player) => {
-                        return {
-                          name: player[1],
-                          guessed: !!snapshot.val()?.guess?.[player[0]],
-                          id: player[0],
-                        };
-                      });
-                    }
-
-
-                    // Put the player into the current round node if the player is not put yet
-                    if (
-                        !snapshot
-                            .child('round' + this.round)
-                            .hasChild('player' + this.playerNumber)
-                    ) {
-                        this.room
-                            .child('round' + this.round)
-                            .child('player' + this.playerNumber)
-                            .set(0);
-
-                        // Other players load the streetview the first player loaded earlier
-                        if (this.playerNumber != 1) {
-                            let randomLat = snapshot
-                                .child(
-                                    'streetView/round' +
-                                        this.round +
-                                        '/latitude'
-                                )
-                                .val();
-                            let randomLng = snapshot
-                                .child(
-                                    'streetView/round' +
-                                        this.round +
-                                        '/longitude'
-                                )
-                                .val();
-
-                            this.area = snapshot
-                                .child(
-                                    'streetView/round' + this.round + '/area'
-                                )
-                                .val();
-                            this.isVisibleDialog = snapshot
-                                .child(
-                                    'streetView/round' + this.round + '/warning'
-                                )
-                                .val();
-                            this.randomFeatureProperties = snapshot
-                                .child(
-                                    'streetView/round' +
-                                        this.round +
-                                        '/roundInfo'
-                                )
-                                .val();
-                            this.randomLatLng = new google.maps.LatLng(
-                                randomLat,
-                                randomLng
-                            );
-                            this.resetLocation();
-                        }
-                    }
-
-                    
-                    // Enable guess button when every players are put into the current round's node
-                    if (
-                        snapshot.child('round' + this.round).numChildren() ===
-                            snapshot.child('size').val() &&
-                        !this.isReady
-                    ) {
-                        // Close the dialog when everyone is ready
-                        this.dialogMessage = false;
-                        this.dialogText = '';
-
-                        this.isReady = true;
-                        this.$refs.mapContainer.startNextRound();
-
-                        // Countdown timer starts
-                        this.timeLimitation = snapshot
-                            .child('timeLimitation')
-                            .val();
-
-                        if (this.timeLimitation != 0) {
-                            if (!this.hasTimerStarted) {
-                                this.initTimer(this.timeLimitation);
-                                this.hasTimerStarted = true;
-                            }
-                        }
-                    }
-
-                    // Delete the room when everyone finished the game
-                    if (
-                        snapshot.child('isGameDone').numChildren() ==
-                        snapshot.child('size').val()
-                    ) {
-                        this.room.child('active').remove();
-                        this.room.off();
-                        this.room.remove();
-                    }
-                } else {
-                    // Force the players to exit the game when 'Active' is removed
-                    this.exitGame();
+            // ルームが存在しているか
+            if (snapshot.hasChild('active')) {
+                // Leaderboard
+                if (this.scoreLeaderboard) {
+                this.leaderboard = Object.entries(snapshot.val().playerName).map((player) => ({
+                    scoreHeader: this.leaderboard.find((e) => e.id === player[0])?.scoreHeader || 0,
+                    score: snapshot.val()?.finalPoints?.[player[0]] || 0,
+                    name: player[1],
+                    id: player[0],
+                    guessed: !!snapshot.val()?.guess?.[player[0]],
+                }));
+                } else if (this.guessedLeaderboard) {
+                this.leaderboard = Object.entries(snapshot.val().playerName).map((player) => ({
+                    name: player[1],
+                    guessed: !!snapshot.val()?.guess?.[player[0]],
+                    id: player[0],
+                }));
                 }
+
+                // ラウンド参加ノードに自分を登録
+                if (!snapshot.child('round' + this.round).hasChild('player' + this.playerNumber)) {
+                this.room.child('round' + this.round).child('player' + this.playerNumber).set(0);
+
+                // 1P 以外はホストが用意した StreetView を反映
+                if (this.playerNumber != 1) {
+                    const randomLat = snapshot.child('streetView/round' + this.round + '/latitude').val();
+                    const randomLng = snapshot.child('streetView/round' + this.round + '/longitude').val();
+
+                    this.area = snapshot.child('streetView/round' + this.round + '/area').val();
+                    this.isVisibleDialog = snapshot.child('streetView/round' + this.round + '/warning').val();
+                    this.randomFeatureProperties = snapshot.child('streetView/round' + this.round + '/roundInfo').val();
+                    this.randomLatLng = new google.maps.LatLng(randomLat, randomLng);
+                    this.resetLocation();
+                }
+                }
+
+                // 全員準備完了で開始
+                if (
+                snapshot.child('round' + this.round).numChildren() === snapshot.child('size').val() &&
+                !this.isReady
+                ) {
+                this.dialogMessage = false;
+                this.dialogText = '';
+                this.isReady = true;
+                this.$refs.mapContainer.startNextRound();
+
+                this.timeLimitation = snapshot.child('timeLimitation').val();
+                if (this.timeLimitation != 0 && !this.hasTimerStarted) {
+                    this.initTimer(this.timeLimitation);
+                    this.hasTimerStarted = true;
+                }
+                }
+
+                // 全員終了でルーム削除
+                if (snapshot.child('isGameDone').numChildren() == snapshot.child('size').val()) {
+                this.room.child('active').remove();
+                this.room.off();
+                this.room.remove();
+                }
+            } else {
+                // Active が消えたら強制退出
+                this.exitGame();
+            }
             });
         }
 

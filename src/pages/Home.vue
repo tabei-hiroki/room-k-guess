@@ -6,7 +6,7 @@
                     <div class="home-page__traveler-container">
                         <img
                             class="home-page__traveler-img"
-                            src="../assets/home/traveller.svg"
+                            src="../assets/home/world_circle.gif"
                             alt="traveler img"
                         />
                     </div>
@@ -17,11 +17,7 @@
                     </v-layout>
                 </v-layout>
             </v-container>
-            <v-btn id="btnMaps" href="#maps-container" large fab color="secondary" dark>
-                <v-icon>mdi-arrow-down</v-icon>
-            </v-btn>
         </section>
-        <MapsContainer />
     </ContentPage>
 </template>
 
@@ -34,7 +30,6 @@ export default {
     components: {
         ContentPage,
         SearchBox,
-        MapsContainer,
     },
     props: {
         dialogCustomOpen: Boolean,

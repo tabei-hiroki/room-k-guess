@@ -20,9 +20,6 @@
                 <v-btn id="historyBtn" text link to="/history">
                     {{ $t('Home.historyBtn') }}
                 </v-btn>
-                <v-btn id="historyBtn" text link to="/medals">
-                    {{ $t('Home.medalsBtn') }}
-                </v-btn>
                 <div class="header__nav__btns">
                     <v-btn id="aboutBtn" icon @click="aboutDialog = true">
                         <v-icon size="30"> mdi-help-circle </v-icon>

@@ -1,82 +1,54 @@
 <template>
-    <v-card id="card-roomname">
-        <v-card-title>
-            <span id="card-title">{{ $t('CardRoomName.title') }}</span>
-        </v-card-title>
-        <v-card-text>
-            <v-container>
-                <v-row>
-                    <v-col cols="12">
-                        <v-text-field
-                            :loading="loadRoom"
-                            :disabled="loadRoom"
-                            :type="streamerMode ? 'password' : 'text'"
-                            id="inputRoomName"
-                            v-model="roomInputValue"
-                            maxlength="10"
-                            autofocus
-                            :error-messages="roomErrorMessage"
-                            @keyup.enter="searchRoom(roomNameText)"
-                        />
-                    </v-col>
-                </v-row>
-            </v-container>
-        </v-card-text>
-        <v-card-actions>
-            <div class="flex-grow-1" />
-            <v-btn dark depressed color="error" @click="cancel">
-                {{ $t('cancel') }}
-            </v-btn>
-            <v-btn
-                dark
-                depressed
-                color="#43B581"
-                @click="searchRoom(roomNameText)"
-            >
-                {{ $t('next') }}
-            </v-btn>
-        </v-card-actions>
-    </v-card>
+  <div style="display:none;"></div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-import CardRoomMixin from './mixins/CardRoomMixin';
+import { mapState } from 'vuex';
+
+// 旧：10文字の擬似名を発行するだけ → ルートにIDがあれば使う
+function shortRandomId() {
+  return Math.random().toString(36).slice(2, 12);
+}
+
+// ルートから来たIDを拾う（param名はプロジェクトのrouter定義に合わせて調整）
+function getRoomIdFromRoute(vm) {
+  const p = vm.$route?.params || {};
+  // よくあるパターン（/room/:roomId）
+  return p.roomId || p.id || p.roomName || null;
+}
+
 export default {
-    mixins: [CardRoomMixin],
-    data() {
-        return {
-            roomNameText: '',
-        };
-    },
-    computed: {
-        ...mapState({
-            streamerMode: (state) => state.homeStore.streamerMode,
-        }),
-        ...mapState('settingsStore', [
-            'roomErrorMessage',
-            'loadRoom',
-            'roomName',
-        ]),
-        roomInputValue: {
-            get: function () {
-                return this.loadRoom ? this.roomName : this.roomNameText;
-            },
-            set: function (newValue) {
-                this.roomNameText = newValue;
-            },
-        },
-    },
-    methods: {
-        ...mapActions('settingsStore', ['searchRoom']),
-    },
+  name: 'CardRoomName',
+  computed: {
+    ...mapState('settingsStore', ['roomName']),
+  },
+  mounted() {
+    // 1) 招待リンク（URL）で来た場合：そのIDで検索のみ
+    const fromRoute = getRoomIdFromRoute(this);
+    if (fromRoute) {
+      // 親やストアに反映（v-model系を使っているならemitしておく）
+      this.$emit('input', fromRoute);
+      this.$emit('update:roomName', fromRoute);
+
+      this.$store.dispatch('settingsStore/searchRoom', fromRoute)
+        .finally(() => this.$emit('next'));
+      return;
+    }
+
+    // 2) すでにストアにroomNameがある場合：それを使う
+    if (this.roomName) {
+      this.$store.dispatch('settingsStore/searchRoom', this.roomName)
+        .finally(() => this.$emit('next'));
+      return;
+    }
+
+    // 3) 新規作成フローのみ：擬似名を発行して検索へ
+    const pseudoName = shortRandomId();
+    this.$emit('input', pseudoName);
+    this.$emit('update:roomName', pseudoName);
+
+    this.$store.dispatch('settingsStore/searchRoom', pseudoName)
+      .finally(() => this.$emit('next'));
+  },
 };
 </script>
-
-<style lang="scss" scoped>
-#card-title {
-    font-size: 16px;
-    font-weight: 500;
-    opacity: 0.9;
-}
-</style>

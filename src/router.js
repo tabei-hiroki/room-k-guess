@@ -85,14 +85,22 @@ export default new Router({
             },
         },
         {
-            path: '/street-view/with-friends',
+            path: '/street-view/with-friends/:roomName',
             name: 'with-friends',
             component: StreetView,
             props: (route) => ({
                 multiplayer: true,
                 ...route.params,
-                nbRoundSelected: route.params.nbRoundSelected ? parseInt(route.params.nbRoundSelected, 10) : 5,
+                nbRoundSelected: route.params.nbRoundSelected
+                ? parseInt(route.params.nbRoundSelected, 10)
+                : 5,
             }),
+            // 任意：無効IDを弾く保険
+            beforeEnter: (to, from, next) => {
+                const id = to.params.roomName;
+                if (!id || /[.#$\[\]]/.test(id)) return next({ name: 'home' });
+                next();
+            },
         },
     ],
 });

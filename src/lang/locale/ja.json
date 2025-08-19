@@ -137,7 +137,7 @@
     "invalidRoomName": "無効な名前です。別の名前を入力して下さい。",
     "inProgress": "最初のプレーヤーが部屋を作っています。再度試して下さい。",
     "roomIsFull": "この部屋は既に満員です。",
-    "alreadyStarted": "This room has already started.  Please try another."
+    "alreadyStarted": "この部屋名は既に使われています。別の部屋をお試しください。"
   },
   "CardRoomName": {
     "title": "部屋の名前を入れて、新しく作るか 参加してください"
@@ -145,7 +145,7 @@
   "CardRoomPlayerName": {
     "title": "Room:",
     "input": "プレイヤー名を入力してください.",
-    "anonymousPlayerName": "Anonymous 🕵",
+    "anonymousPlayerName": "Anonymous",
     "players": "1 player | {count} players"
   },
   "CardRoomSize": {

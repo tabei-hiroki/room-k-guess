@@ -145,7 +145,7 @@
   "CardRoomPlayerName": {
     "title": "Room:",
     "input": "Type a player name.",
-    "anonymousPlayerName": "Anonymous 🕵",
+    "anonymousPlayerName": "Anonymous",
     "players": "1 player | {count} players"
   },
   "CardRoomSize": {
