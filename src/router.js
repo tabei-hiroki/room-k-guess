@@ -98,7 +98,7 @@ export default new Router({
             // 任意：無効IDを弾く保険
             beforeEnter: (to, from, next) => {
                 const id = to.params.roomName;
-                if (!id || /[.#$\[\]]/.test(id)) return next({ name: 'home' });
+                if (!id || /[.#$[\]]/.test(id)) return next({ name: 'home' });
                 next();
             },
         },

@@ -408,10 +408,7 @@ export default {
 
       const rid = fromStore || fromRef || fromRoute;
 
-      if (!rid || /[.#$\[\]]/.test(rid)) {
-        console.error('[with-friends] roomName is empty or invalid. Abort navigation.', {
-          fromStore, fromRef, fromRoute
-        });
+      if (!rid || /[.#$[\]]/.test(rid)) {
         dispatch('closeDialogRoom', false);
         router.replace({ name: 'home' });
         return;

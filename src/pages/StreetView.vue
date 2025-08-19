@@ -302,7 +302,7 @@ export default {
     async mounted() {
         // ルート > props の順で roomId を解決（props は変更しない）
         const rid = this.$route?.params?.roomName || this.roomName || '';
-        if (!rid || /[.#$\[\]]/.test(rid)) {
+        if (!rid || /[.#$[\]]/.test(rid)) {
             // 空 or Firebase 禁止文字ならホームへ
             this.$router.replace({ name: 'home' });
             return;

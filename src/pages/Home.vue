@@ -25,7 +25,6 @@
 import SearchBox from '@/components/home/SearchBox';
 import ContentPage from '@/components/page/ContentPage';
 import { GAME_MODE } from '../constants';
-import MapsContainer from '@/components/home/MapsContainer.vue';
 export default {
     components: {
         ContentPage,
