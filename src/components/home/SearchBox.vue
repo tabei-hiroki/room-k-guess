@@ -3,7 +3,7 @@
         <h2>{{ $tc('Home.placeVisited', nbPlaceVisits) }}</h2>
 
         <div class="search-box__btns">
-            <v-btn
+            <!-- <v-btn
                 class="search-box__btns__btn"
                 rounded
                 color="primary"
@@ -11,12 +11,12 @@
                 @click="openDialog()"
             >
                 {{ $t('DialogRoom.singlePlayer') }}
-            </v-btn>
+            </v-btn> -->
 
             <v-btn
                 class="search-box__btns__btn"
                 rounded
-                color="secondary"
+                color="primary"
                 large
                 @click="openDialog(false)"
             >

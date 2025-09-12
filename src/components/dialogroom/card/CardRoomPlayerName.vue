@@ -1,3 +1,4 @@
+<!-- CardRoomPlayerName.vue -->
 <template>
   <v-card id="card-playername">
     <v-card-title>
@@ -18,8 +19,10 @@
           <v-col cols="12">
             <v-text-field
               id="inputPlayerName"
-              :value="name"
-              @input="setPlayerName"
+              :value="localName"
+              @input="onInput"
+              @compositionstart="isComposing = true"
+              @compositionend="onCompositionEnd"
               maxlength="20"
               autofocus
               :label="$t('CardRoomPlayerName.input')"
@@ -82,6 +85,14 @@ import CardRoomMixin from './mixins/CardRoomMixin';
 export default {
   name: 'CardRoomPlayerName',
   mixins: [CardRoomMixin],
+
+  data() {
+    return {
+      isComposing: false,
+      localName: this.name ?? '',
+    };
+  },
+
   computed: {
     ...mapState('settingsStore', [
       'playerNumber',
@@ -112,8 +123,37 @@ export default {
     },
   },
 
+  watch: {
+    // 外部更新が来た場合に、変換中でなければ同期
+    name(n) {
+      if (!this.isComposing) this.localName = n ?? '';
+    },
+  },
+
   methods: {
     ...mapActions('settingsStore', ['startGame', 'setPlayerName']),
+
+    onInput(val) {
+      // Vuetify v-text-field の input は value を直接渡す
+      this.localName = val;
+      if (this.isComposing) return; // 変換中は store を触らない
+      this.pushToStore(val);
+    },
+
+    onCompositionEnd(e) {
+      this.isComposing = false;
+      const val = e?.target?.value ?? this.localName;
+      this.localName = val;
+      this.pushToStore(val); // 確定した文字列を反映
+    },
+
+    pushToStore(val) {
+      // 必要なら確定後にのみ正規化を行う（例: NFC）
+      // const normalized = val.normalize('NFC');
+      // this.setPlayerName(normalized);
+      this.setPlayerName(val);
+    },
+
     copy() {
       this.$copyText(this.roomUrl, this.$refs.roomUrl);
     },
