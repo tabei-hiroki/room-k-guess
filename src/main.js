@@ -23,7 +23,7 @@ Vue.use(GmapVue, {
     load: {
         key: process.env.VUE_APP_API_KEY,
         language: localStorage.getItem('language'),
-        v: '3.55',
+        v: 'weekly',
     },
 });
 Vue.config.productionTip = false;

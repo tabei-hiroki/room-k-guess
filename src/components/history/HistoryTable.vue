@@ -26,30 +26,6 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <div class="history-table__btns">
-            <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                    <div v-bind="attrs" v-on="on">
-                        <v-file-input
-                            hide-input
-                            accept="application/json"
-                            prepend-icon="mdi-download-outline"
-                            @change="importSave"
-                        />
-                    </div>
-                </template>
-                <span>{{ $t('History.importGeoSave') }}</span>
-            </v-tooltip>
-
-            <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn icon v-bind="attrs" v-on="on" @click="exportSave">
-                        <v-icon>mdi-upload-outline</v-icon>
-                    </v-btn>
-                </template>
-                <span>{{ $t('History.exportGeoSave') }}</span>
-            </v-tooltip>
-        </div>
         <v-text-field
             v-model="search"
             :label="$t('History.search')"
@@ -140,10 +116,6 @@ export default {
         }),
         headers() {
             return[
-                {
-                    text: this.$t('History.date'),
-                    value: 'dateString',
-                },
                 {
                     text: this.$t('History.mapName'),
                     value: 'mapName',

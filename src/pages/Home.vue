@@ -6,7 +6,7 @@
                     <div class="home-page__traveler-container">
                         <img
                             class="home-page__traveler-img"
-                            src="../assets/home/world_circle.gif"
+                            src="@/assets/home/world_circle.gif"
                             alt="traveler img"
                         />
                     </div>
